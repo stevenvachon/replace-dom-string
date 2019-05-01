@@ -1,0 +1,66 @@
+{
+  "name": "replace-dom-string",
+  "description": "Replace one or more matching strings/regexes within a DOM tree.",
+  "version": "2.0.0",
+  "license": "MIT",
+  "author": "Steven Vachon <contact@svachon.com> (https://svachon.com)",
+  "repository": "github:stevenvachon/replace-dom-string",
+  "main": "index-es5.js",
+  "dependencies": {
+    "escape-string-regexp": "^2.0.0",
+    "is-object": "^1.0.1",
+    "is-regexp": "^2.1.0",
+    "is-string": "^1.0.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.3",
+    "gzip-size-cli": "^3.0.0",
+    "mocha": "^6.1.4",
+    "npm-watch": "~0.6.0",
+    "nyc": "^14.1.1",
+    "parcel": "^1.12.3",
+    "puppeteer": "^1.16.0",
+    "puppeteer-to-istanbul": "^1.2.2",
+    "rimraf": "^2.6.3"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "scripts": {
+    "build": "npm run build-release && npm run build-test",
+    "build-release": "babel index.js --out-file=index-es5.js --plugins=add-module-exports --presets=@babel/env --source-maps",
+    "build-test": "parcel build index-es5.js --global=replaceDOMString --log-level=1 --no-cache --out-dir='.' --out-file=temp.js --public-url='.' && gzip-size temp.js",
+    "ci": "npm run test && nyc report --reporter=text-lcov | coveralls",
+    "posttest": "nyc report --reporter=text-summary --reporter=html && rimraf temp.js temp.js.map",
+    "prepublishOnly": "npm test",
+    "pretest": "npm run build",
+    "test": "nyc --silent mocha test.js --bail --check-leaks --timeout=5000",
+    "test:watch": "npm-watch test"
+  },
+  "watch": {
+    "test": {
+      "inherit": true,
+      "patterns": [
+        "index.js",
+        "test.js"
+      ]
+    }
+  },
+  "files": [
+    "index.js",
+    "index-es5.js",
+    "index-es5.js.map"
+  ],
+  "keywords": [
+    "dom",
+    "html",
+    "replace",
+    "traverse",
+    "walk"
+  ]
+}
